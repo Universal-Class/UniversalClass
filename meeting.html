@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width = device-width, initial-scale = 1.0">
+
+  <link rel="stylesheet" type="text/css" href="CSS/meeting_create.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-auth.js"></script>
+
+  <title>
+    Meeting
+  </title>
+</head>
+
+<body>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAH23Ty_bxuFtl9zCoh8yqgddWdrh3eJps",
+      authDomain: "universalclass-182de.firebaseapp.com",
+      databaseURL: "https://universalclass-182de-default-rtdb.firebaseio.com",
+      projectId: "universalclass-182de",
+      storageBucket: "universalclass-182de.appspot.com",
+      messagingSenderId: "551284945198",
+      appId: "1:551284945198:web:e25b53b4f820d8399f0abf",
+      measurementId: "G-M5TX0MJSDG"
+    };
+    firebase.initializeApp(firebaseConfig);
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+      } else {
+          window.location.replace("index.html");
+      }
+    });
+  </script>
+
+  <div id="modal" class="modal">
+    <div class="testbox">
+      <form onsubmit="return false;">
+        <span class="close">&times;</span>
+        <div class="banner">
+          <h1>Create New Post</h1>
+        </div>
+
+        <div class="item">
+          <p>Title</p>
+          <div class="name-item">
+            <input type="text" name="title" id="title" placeholder="Title of your meeting" />
+
+          </div>
+        </div>
+
+        <div class="item">
+          <p>Professor Details</p>
+          <div class="name-item">
+            <input type="text" name="name" id="Profname" placeholder="Name of the Professor" />
+            <input type="text" id = "university" placeholder="Pick a university..." list="unilist">
+                      <datalist id = "unilist">
+                          <option value="Amrita University, Coimbatore">Amrita University, Coimbatore</option>
+                          <option value="Amrita University, Chennai">Amrita University, Chennai</option>
+                          <option value="Amrita University, Banglore">Amrita University, Banglore</option>
+                          <option value="Vellore Institute of Technology, Vellore">Vellore Institute of Technology, Vellore</option>
+                          <option value="SRM University , Chennai">SRM University , Chennai</option>
+
+                      </datalist>
+
+          </div>
+        </div>
+        <div class="item">
+          <p>
+            Subject
+          </p>
+          <select id="sub" placeholder = "Choose a subject">
+                            <option value="Data Science">Data Science</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Human Computer Interaction">Human Computer Interaction</option>
+                            <option value="Python">Python</option>
+                            <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                            <option value="Physic">Physics</option>
+                            <option value="Artificial Intelligence">Artificial Intelligence</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Cryptography">Cryptography</option>
+                            <option value="Web Development">Web Development</option>
+
+          </select>
+        </div>
+
+        <div class="item">
+          <p>Date</p>
+          <input type="date" name="bdate" id="bdate" />
+          <i class="fas fa-calendar"></i>
+        </div>
+        <div class="item">
+          <p>Time</p>
+          <div class="name-item">
+            <input type="time" name="name" placeholder="from" id="stime" />
+            <i class="fas fa-clock"></i>
+            <input type="time" name="name" placeholder="till" id="etime" />
+            <i class="fas fa-clock"></i>
+          </div>
+        </div>
+
+        <div class="item">
+          <p>Meeting Link</p>
+          <input type="text" name="name" id="link" />
+        </div>
+
+
+        <div class="btn-block">
+          <button onclick="validate()">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+
+
+
+  </div>
+
+  <script>
+    // Get the modal
+    function validate() {
+      console.log(firebase.auth().currentUser.uid)
+      var title = document.getElementById("title").value
+      var profname = document.getElementById("Profname").value
+      var uniname = document.getElementById("university").value
+      var subId = document.getElementById("sub")
+      var subject = subId.options[subId.selectedIndex].text;
+      var date = document.getElementById("bdate").value
+      var starttime = document.getElementById("stime").value
+      var endtime = document.getElementById("etime").value
+      var link = document.getElementById("link").value
+      console.log(title, profname, uniname, subject, date, starttime, endtime, link)
+
+      if (title != '' && profname != '' && uniname != '' && subject != '' && date != '' && starttime != '' && endtime != '' && link != '') {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://universalclass.pythonanywhere.com/add_meet', true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        xhr.withCredentials = false;
+        xhr.onload = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            alert('Meeting has been registered successfully!')
+          window.location.replace("home.html");
+          }
+          else{
+            alert('Failed!')
+          }
+        };
+        const userData = {
+          "end_time": endtime,
+          "id": firebase.auth().currentUser.uid,
+          "link": link,
+          "start_time": starttime,
+          "label": subject,
+          "class_name": title,
+          'date':date
+        }
+        xhr.send(JSON.stringify(userData));
+      }
+      else {
+        alert('Please fill all fields')
+      }
+
+    }
+
+    var modal = document.getElementById("modal");
+    var btn = document.getElementById("myBtn");
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+      console.log('close')
+      window.location.replace("home.html");
+    }
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        console.log('close')
+        window.location.replace("home.html");
+      }
+    }
+  </script>
+
+
+</body>
+
+</html>

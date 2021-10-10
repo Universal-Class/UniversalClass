@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Classrooms</title>
+    <link rel="stylesheet" href="CSS/Homestyles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-auth.js"></script>
+</head>
+
+<body>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAH23Ty_bxuFtl9zCoh8yqgddWdrh3eJps",
+            authDomain: "universalclass-182de.firebaseapp.com",
+            databaseURL: "https://universalclass-182de-default-rtdb.firebaseio.com",
+            projectId: "universalclass-182de",
+            storageBucket: "universalclass-182de.appspot.com",
+            messagingSenderId: "551284945198",
+            appId: "1:551284945198:web:e25b53b4f820d8399f0abf",
+            measurementId: "G-M5TX0MJSDG"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                console.log(user)
+                makeRequest(firebase.auth().currentUser.uid)
+            } else {
+                console.log(null)
+                window.location.replace("index.html");
+            }
+        });
+
+    </script>
+    <script>
+        function logout() {
+            firebase.auth().signOut().then(function () {
+            }, function (error) {
+                alert(error);
+            });
+        }
+    </script>
+
+    <div id="header">
+        <div></div>
+        <h1>Welcome to the universe of possibilities</h1>
+        <button class='logout' onclick='logout()'>Logout</button>
+    </div>
+    <div id="mainContent">
+        <div id="book-list">
+            <h2 class="title">Upcoming Universal Classes</h2>
+            <form id="search-class">
+                <input type="text" placeholder="Search labels..." />
+                <input type="checkbox" id="preferences" name="preferences" value="preferences" Checked />
+                <label for="preferences">Apply Preferences</label>
+            </form>
+            <ul id="class-list"></ul>
+        </div>
+    </div>
+    <div id="makePost">
+        <span id="post" onclick='redirect_page()'>+ Make a Post</span>
+    </div>
+    <script>
+        function redirect_page(){
+            window.location.replace("meeting.html");
+        }
+        function myFunction(data) {
+            document.getElementById("class-list").innerHTML = `
+             ${data.map(function (classInfo) {
+                return `
+            <li>
+            <div class="info">
+        
+                <span class="name">${classInfo.class_name}</span>
+                <span class="about">${classInfo.teacher_name}</span>
+                <span class="about">${classInfo.start_time} to ${classInfo.end_time}</span>
+                <span class="about">${classInfo.university}</span>
+                <span class="about" id="label">${classInfo.label}</span>
+            </div>
+            <a href="${classInfo.link}">
+            <span class="link">Join live class</span>
+            </a>
+            </li>
+        `
+            }).join('')}
+`
+        }
+
+        var g = document.getElementById("preferences").checked;
+        console.log(g)
+        var checkbox = document.querySelector("input[name=preferences]");
+        checkbox.addEventListener('change', function () {
+            var g = this.checked;
+            if (g) {
+                console.log(g);
+                console.log("Checkbox is checked..");
+                makeRequest(firebase.auth().currentUser.uid)
+            } else {
+                console.log(g);
+                console.log("Checkbox is not checked..");
+                makeRequest(null)
+            }
+        });
+
+        function makeRequest(id) {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "http://universalclass.pythonanywhere.com/get_data";
+            const dataBody = {
+                'id': id
+            }
+            console.log(id, dataBody)
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    console.log(data)
+                    myFunction(data);
+                }
+            };
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xmlhttp.setRequestHeader('Access-Control-Allow-Origin', '*');
+            console.log(JSON.stringify(dataBody))
+            xmlhttp.send(JSON.stringify(dataBody));
+        }
+
+
+
+        const list = document.querySelector('#class-list')
+        const searchBar = document.forms['search-class'].querySelector('input');
+        searchBar.addEventListener('keyup', function (e) {
+            const term = e.target.value.toLowerCase();
+            const labels = list.getElementsByTagName('li');
+            Array.from(labels).forEach(function (label) {
+                const title = label.firstElementChild.children[4].textContent;
+                console.log(title)
+                if (title.toLowerCase().indexOf(term) != -1) {
+                    label.style.display = "";
+                }
+                else {
+                    label.style.display = "none";
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

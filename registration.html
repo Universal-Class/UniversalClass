@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- 
+    Name
+    Email
+    University 
+    Pswd
+    Student or teacher
+    Preference
+-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://www.gstatic.com/firebasejs/5.9.4/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.3.0/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-auth.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background: linear-gradient(to center, #FFFFFF, #1a4df3);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        
+
+        h1 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        body {
+            background: linear-gradient(to center, #FFFFFF, #1a4df3);
+            background-size: cover;
+        }
+
+        .center_div {
+            padding-left: 5%;
+            padding-right: 5%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .registration_box {
+            max-width: 600px;
+            margin: auto;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+            width: 60%;
+            z-index: 100;
+        }
+        button {
+	        border-radius: 20px;
+	        border: 1px solid #4777fa;
+	        background-color: #4777fa;
+	        color: #FFFFFF;
+	        font-size: 12px;
+	        font-weight: bold;
+	        padding: 12px 45px;
+	        letter-spacing: 1px;
+	        text-transform: uppercase;
+	        transition: transform 80ms ease-in;
+        }
+        button:hover {
+            background: rgb(35, 10, 255);
+        }
+
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        input,
+        select {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            width: 100%;
+        }
+
+
+
+        
+        
+        button:active {
+            transform: scale(0.95);
+        }
+        
+        button:focus {
+            outline: none;
+        }
+        
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+        }
+
+        #ctrl_cmd {
+            font-size: 10px;
+        }
+        #button_holder{
+            text-align: center;
+        }
+        .custom-shape-divider-top-1633867065 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1633867065 svg {
+    position: relative;
+    display: block;
+    width: calc(128% + 1.3px);
+    height: 162px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-top-1633867065 .shape-fill {
+    fill: #365afc79;
+}
+.custom-shape-divider-bottom-1633867132 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1633867132 svg {
+    position: relative;
+    display: block;
+    width: calc(128% + 1.3px);
+    height: 162px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1633867132 .shape-fill {
+    fill: #4a36fc9a;
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    bottom: 0;
+    position: relative;
+    left: 0;
+    right: 0;
+    text-align: center;
+	overflow: hidden;
+    z-index: -2;
+
+}
+    </style>
+</head>
+
+<body>
+    <div class="custom-shape-divider-top-1633867065">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+        </svg>
+    </div>
+    
+
+    <script>
+        var flag = true
+        const firebaseConfig = {
+            apiKey: "AIzaSyAH23Ty_bxuFtl9zCoh8yqgddWdrh3eJps",
+            authDomain: "universalclass-182de.firebaseapp.com",
+            databaseURL: "https://universalclass-182de-default-rtdb.firebaseio.com",
+            projectId: "universalclass-182de",
+            storageBucket: "universalclass-182de.appspot.com",
+            messagingSenderId: "551284945198",
+            appId: "1:551284945198:web:e25b53b4f820d8399f0abf",
+            measurementId: "G-M5TX0MJSDG"
+          };
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user && flag) {
+              window.location.replace("home.html");
+            } else {
+            }
+          });
+    </script>
+
+
+    <script>
+        function validate() {
+            var name = document.getElementById("name").value;
+            var email = document.getElementById("email").value;
+            var university = document.getElementById("university").value;
+            var account_type = document.getElementById("type").value;
+            var selected = document.getElementById('interest');
+            var password = document.getElementById('password').value;
+            console.log(university)
+
+            if (name != '' && email != '' && university != '' && selected != [] && password != '') {
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        flag = false
+                        var user = userCredential.user;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', 'http://universalclass.pythonanywhere.com/add_data', true);
+                        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+                        xhr.withCredentials = false;
+                        xhr.onload = function () {
+                            console.log(this.responseText);
+                            window.location.replace("home.html");
+
+                        };
+                        const userData = {
+                            'id': firebase.auth().currentUser.uid,
+                            'name': name,
+                            'university': university,
+                            'account_type': account_type,
+                            'interest': getSelectValues(selected)
+                        }
+                        console.log(userData)
+                        xhr.send(JSON.stringify(userData));
+
+                    })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorCode, errorMessage)
+                        alert(errorMessage)
+                    });
+
+            }
+            else {
+                alert('Please fill all fields')
+            }
+        }
+
+        function getSelectValues(select) {
+            var result = [];
+            var options = select && select.options;
+            var opt;
+
+            for (var i = 0, iLen = options.length; i < iLen; i++) {
+                opt = options[i];
+
+                if (opt.selected) {
+                    result.push(opt.value || opt.text);
+                }
+            }
+            return result;
+        }
+    </script>
+    <div class='center_div'>
+        <div class="registration_box">
+            <div>
+                <h1>Register Now</h1>
+                <br>
+                    <input type="text" id="name" name="name" placeholder="Username">
+
+                    <input type="email" id="email" name="email" placeholder="eg: abc@xyz.com"">
+
+                    <label for="type">Account Type</label>
+                    <select id="type" name="type">
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+
+                    <label for="university">University</label>
+                      <input type="text" id = "university" placeholder="Pick a university..." list="unilist">
+                      <datalist id = "unilist">
+                          <option value="Amrita University, Coimbatore">Amrita University, Coimbatore</option>
+                          <option value="Amrita University, Chennai">Amrita University, Chennai</option>
+                          <option value="Amrita University, Banglore">Amrita University, Banglore</option>
+                          <option value="Vellore Institute of Technology, Vellore">Vellore Institute of Technology, Vellore</option>
+                          <option value="SRM University , Chennai">SRM University , Chennai</option>
+                      </datalist>
+                    
+
+                    <label for="interest">Your Interests <span id="ctrl_cmd">(press ctrl/cmd to select
+                        multiple)</span></label>
+                        <select name="interest" id="interest" multiple>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Human Computer Interaction">Human Computer Interaction</option>
+                            <option value="Python">Python</option>
+                            <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                            <option value="Physic">Physics</option>
+                            <option value="Artificial Intelligence">Artificial Intelligence</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Cryptography">Cryptography</option>
+                            <option value="Web Development">Web Development</option>
+                        </select>
+
+
+
+                    <input type="password" id="password" name="password" placeholder="password">
+                    <div id="button_holder">
+
+                    <button onclick="validate()">
+                        Submit
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+   <div class="footer">
+    <div class="custom-shape-divider-bottom-1633867132">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" class="shape-fill"></path>
+            <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" class="shape-fill"></path>
+            <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" class="shape-fill"></path>
+        </svg>
+    </div>
+   </div>
+</body>
+
+</html>

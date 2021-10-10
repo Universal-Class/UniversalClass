@@ -1,0 +1,175 @@
+*{
+    margin: 0;
+    font-family: 'Montserrat';
+}
+
+body{
+    background-image: repeating-linear-gradient(65deg, #ec816f, #e6648b, #5072e2);
+    background-attachment: fixed;
+
+}
+
+.logout{
+    color: #fff;
+    border-radius: 10px;
+    background-color:#00789c;
+    padding: 10px;
+    border: 0px;
+    width: min-content;
+    height: min-content;
+}
+
+.logout:hover{
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+    transition: all ease-in-out 0.3s;
+}
+
+#header{
+    align-items: center;
+    background-image: linear-gradient(to right, #FFFFFF, #e6648b);
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 5;
+}
+
+#mainContent{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 150px;
+    margin-bottom: 50px;
+    width: 70%;
+    height: 100%;     
+    border-radius: 15px;
+    background-color: #FFFFFF;
+}
+
+
+#book-list{
+    padding: 0 5% 2% 5%;
+}
+
+input[type=text]{
+    width: 90%;
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #444;
+}
+
+input[type=checkbox]{
+    width: 20px;
+    height: 20px;
+}
+
+label{
+    font-weight: 400;
+    font-size: 18px;
+    margin: 4px;
+    padding-left: 2px;
+}
+
+#book-list ul, #tabbed-content ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+#book-list li{
+    padding: 20px;
+    border-left: 5px solid #ddd;
+    margin: 20px 10px;
+    display:flex;
+    justify-content:space-between;
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+}
+
+.info .about{
+    font-size: 20px;
+    padding: 4px;
+}
+
+.name{
+    font-weight: 600;
+    font-size:28px;
+    padding: 2px;
+}
+
+#book-list li:hover{
+    border-color: #9361bf;
+}
+
+a{
+    float: right;
+    margin: 2%;
+    background: #9361bf;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    width: 20%;
+    height: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+h1, h2{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    text-align: center;
+    font-family: 'Montserrat';
+}
+
+
+#makePost{
+    display: flex;
+    justify-content:center
+}
+
+#post{
+    position:fixed;
+    bottom: 2%;
+    background-color: rgb(49, 131, 127);
+    padding: 18px;
+    cursor: pointer;
+    border-radius: 15px;
+    color: white;
+
+}
+
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #000a41;
+    border-radius: 2px;
+}
+
+::-webkit-scrollbar
+{
+    width: 8px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear,
+        left bottom,
+        left top,
+        color-stop(0.44, rgb(122,153,217)),
+        color-stop(0.72, rgb(73,125,189)),
+        color-stop(0.86, rgb(28,58,148)));
+}
